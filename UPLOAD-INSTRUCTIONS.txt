@@ -1,0 +1,44 @@
+MTH LABS — UPLOAD GUIDE
+=======================
+
+1. Extract MTH-Labs-Website.zip on your computer.
+2. Open https://github.com/mustafa327/mth-labs
+3. Choose Add file > Upload files.
+4. Upload the extracted files and folders, preserving the assets/ and brand/ folders.
+   IMPORTANT: index.html must be directly in the repository root, alongside README.md.
+   Do not upload the ZIP itself, and do not put everything inside an extra mth-labs folder.
+5. Commit the uploaded files to main. The included README.md replaces the starter README.
+
+TO ACTIVATE GITHUB PAGES (review the hosting note below first):
+Open https://github.com/mustafa327/mth-labs/settings/pages
+Source: Deploy from a branch
+Branch: main
+Folder: /(root)
+Save, then check deployment status in Settings > Pages or the Actions tab.
+After a successful deployment, the intended address is:
+https://mustafa327.github.io/mth-labs/
+
+The .nojekyll file may be hidden by your operating system. On macOS, Command+Shift+.
+shows hidden files. Include it when uploading if possible. You can also create an
+empty file named .nojekyll using GitHub's Add file > Create new file.
+
+HOSTING NOTE:
+GitHub Pages is not allowed as free hosting for running an online business or for
+sites primarily facilitating commercial transactions or commercial SaaS. This is
+an informational developer portfolio, but check that your intended use fits the
+policy. For a sales-focused business site, the README includes Cloudflare Pages
+instructions using exactly the same source repository.
+GitHub policy: https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
+
+EMAIL:
+The request builder prepares an email addressed to mustafathaear97@gmail.com.
+The visitor reviews it and sends it using their email app or Gmail.
+It does NOT send messages automatically. Copy and download fallbacks are included.
+
+LOCAL PREVIEW:
+Open index.html in a browser with the assets folder beside it.
+Or run: python3 -m http.server 8000
+Then open http://localhost:8000
+
+No npm installation, build command, API keys or paid backend are required.
+See README.md for editing instructions and the pre-launch content checklist.
