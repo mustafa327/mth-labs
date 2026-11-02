@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mustafa327.github.io/mth-labs/sitemap.xml
