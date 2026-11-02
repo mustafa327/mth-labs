@@ -1,0 +1,20 @@
+/* MTH Labs 2.0: polished conversion-first layout */
+:root{--accent:#8bd8ff}
+.site-header{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.hero h1,.section-heading h2,.contact-copy h2,.studio-copy h2{letter-spacing:-.055em}
+.button-primary{transition:transform .22s,box-shadow .22s;box-shadow:0 12px 30px #258cff22}
+.button-primary:hover{transform:translateY(-3px);box-shadow:0 20px 45px #258cff44}
+.service-card,.project-card{transition:transform .28s,border-color .28s,box-shadow .28s}
+.service-card:hover,.project-card:hover{transform:translateY(-5px);border-color:#79d1ff77;box-shadow:0 22px 60px #0005}
+.mth-value-strip{background:linear-gradient(90deg,#0e1b2e,#142b44,#0e1b2e);border-block:1px solid #29415a}
+.mth-value-inner{max-width:1200px;margin:auto;padding:19px 24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mth-value-inner span{color:#d9eafa;font-size:12px;font-weight:600}
+.mth-value-inner span:before{content:"✦";color:#75cfff;margin-right:10px}
+.mth-offer{max-width:1200px;margin:auto;padding:40px 24px 5px}
+.mth-offer-card{background:linear-gradient(110deg,#152c45,#0e1d2e);border:1px solid #345676;border-radius:22px;padding:clamp(24px,4vw,44px);display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}
+.mth-offer-card h2{font-size:clamp(25px,3vw,39px);letter-spacing:-.045em;color:#fff;margin:10px 0}
+.mth-offer-card p{max-width:650px;color:#b0c6d9;font-size:14px;line-height:1.7}
+.mth-offer-card .eyebrow{font-size:11px;letter-spacing:.14em;color:#83d4ff}
+.mth-offer-card .button{white-space:nowrap}
+@media(max-width:760px){.mth-offer-card{grid-template-columns:1fr}.mth-value-inner{justify-content:flex-start;gap:12px 18px}.mth-value-inner span{font-size:11px}.service-card:hover,.project-card:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.button-primary,.service-card,.project-card{transition:none!important;transform:none!important}}
