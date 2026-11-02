@@ -1,0 +1,25 @@
+/* MTH Labs hero: living systems, worlds, and connections */
+.hero-art{--mx:0;--my:0;--scroll:0;position:relative;overflow:hidden;isolation:isolate}
+.hero-art .system-art{transform:perspective(1000px) rotateY(calc(var(--mx)*6deg)) rotateX(calc(var(--my)*-5deg)) translateY(calc(var(--scroll)*-13px));transform-origin:50% 50%;transition:transform .2s ease-out;will-change:transform}
+.hero-art .art-core{transform-origin:280px 230px;animation:mth-core-breathe 4.5s ease-in-out infinite;filter:drop-shadow(0 0 13px #6ec8ff88)}
+.hero-art .art-base{transform-origin:280px 270px;animation:mth-base-float 6s ease-in-out infinite}
+.hero-art .mth-hero-node{cursor:pointer;outline:none}
+.hero-art .mth-hero-node .mth-node-ring{fill:transparent;stroke:#77d9ff;stroke-width:1.5;opacity:.28;transform-box:fill-box;transform-origin:center;animation:mth-node-pulse 3s ease-out infinite}
+.hero-art .mth-hero-node[data-node=worlds] .mth-node-ring{animation-delay:1s}
+.hero-art .mth-hero-node[data-node=connected] .mth-node-ring{animation-delay:2s}
+.hero-art .mth-hero-node:is(:hover,:focus-visible) .mth-node-ring,.hero-art .mth-hero-node.is-selected .mth-node-ring{opacity:1;stroke-width:2.5}
+.hero-art .mth-hero-node text{fill:#c8e9ff;transition:fill .2s}
+.hero-art .mth-hero-node:is(:hover,:focus-visible) text,.hero-art .mth-hero-node.is-selected text{fill:white}
+.hero-art .mth-signal{stroke:#79d6ff;stroke-width:2;stroke-linecap:round;stroke-dasharray:3 17;animation:mth-signal-travel 2.7s linear infinite;filter:drop-shadow(0 0 5px #5dbaff)}
+.hero-art .mth-signal.reverse{animation-direction:reverse}
+.hero-art .mth-hero-caption{position:absolute;left:18px;right:18px;bottom:46px;padding:10px 14px;border:1px solid #487ea366;border-radius:10px;background:#09192adf;backdrop-filter:blur(8px);display:flex;gap:10px;align-items:center;justify-content:space-between;color:#d3edff;font-size:11px;letter-spacing:.03em;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s}
+.hero-art:is(:hover,:focus-within) .mth-hero-caption,.hero-art .mth-hero-caption.is-visible{opacity:1;transform:none}
+.hero-art .mth-hero-caption strong{color:#7dd5ff;font-size:10px;letter-spacing:.1em;white-space:nowrap}
+.hero-art .mth-hero-hint{position:absolute;top:52px;right:15px;color:#8bb2ce;font-size:10px;letter-spacing:.08em;pointer-events:none}
+@keyframes mth-core-breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.025)}}
+@keyframes mth-base-float{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+@keyframes mth-node-pulse{0%{transform:scale(.7);opacity:.65}100%{transform:scale(2.3);opacity:0}}
+@keyframes mth-signal-travel{to{stroke-dashoffset:-100}}
+@media(hover:none){.hero-art .mth-hero-caption{opacity:1;transform:none}.hero-art .mth-hero-hint{display:none}}
+@media(prefers-reduced-motion:reduce){.hero-art .system-art,.hero-art .art-core,.hero-art .art-base,.hero-art .mth-node-ring,.hero-art .mth-signal{animation:none!important;transition:none!important;transform:none!important}.hero-art .mth-hero-caption{opacity:1;transform:none}}
+@media print{.hero-art .mth-hero-hint,.hero-art .mth-hero-caption{display:none}}
