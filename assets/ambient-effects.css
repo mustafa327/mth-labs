@@ -1,0 +1,6 @@
+/* Ambient motion layer. Canvas never intercepts navigation or forms. */
+.mth-particle-layer{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+.mth-reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.75,.25,1)}
+.mth-reveal.mth-visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.mth-particle-layer{display:none}.mth-reveal{opacity:1!important;transform:none!important;transition:none!important}}
+@media print{.mth-particle-layer{display:none!important}.mth-reveal{opacity:1!important;transform:none!important}}
