@@ -18,7 +18,6 @@ def get(path):
         return response.read()
 
 try:
-    # Wait only for this deployment's identifiable content; never change the site.
     for attempt in range(24):
         try:
             page_html = get('oceanbond.html?raft-check=' + str(int(time.time()))).decode()
@@ -53,40 +52,36 @@ try:
         assert report['checks']['loaded_asset']['triangles'] == 146192
         assert report['checks']['loaded_asset']['clips'] == ['Wind_and_Waves_8s']
         before = page.evaluate('window.__frame.time')
-        page.wait_for_timeout(700)
-        assert page.evaluate('window.__frame.time') > before
+        page.wait_for_function('(t) => window.__frame.time > t', arg=before, timeout=30000)
         report['checks']['animation_advances'] = True
         page.locator('#play').click()
-        page.wait_for_timeout(200)
+        page.wait_for_function('window.__frame.paused === true', timeout=30000)
         frozen = page.evaluate('window.__frame.time')
         page.wait_for_timeout(400)
-        assert page.evaluate('window.__frame.paused') is True
-        assert page.evaluate('window.__frame.time') == frozen
+        assert page.evaluate('window.__frame.time') == frozen, 'Paused clock advanced'
         report['checks']['pause_freezes_motion'] = True
         page.evaluate('window.__test.setTime(0.4)')
-        page.wait_for_timeout(150)
+        page.wait_for_function('Math.abs(window.__frame.time - 0.4) < 0.00001', timeout=30000)
         state_a = page.evaluate('window.__test.state()')
         page.evaluate('window.__test.setTime(1.5)')
-        page.wait_for_timeout(150)
+        page.wait_for_function('Math.abs(window.__frame.time - 1.5) < 0.00001', timeout=30000)
         state_b = page.evaluate('window.__test.state()')
-        assert state_a != state_b
+        assert state_a != state_b, 'Baked animation state did not change between two timestamps'
         report['checks']['baked_model_state_changes'] = True
         for view in ['full', 'sail', 'detail']:
             page.locator('[data-view="' + view + '"]').click()
-            page.wait_for_timeout(1100)
-            assert page.evaluate('window.__frame.view') == view
-            assert page.evaluate('window.__frame.glError') == 0
+            page.wait_for_function('(v) => window.__frame.view === v', arg=view, timeout=30000)
+            page.wait_for_timeout(1300)
+            assert page.evaluate('window.__frame.glError') == 0, 'WebGL error in ' + view
             page.screenshot(path=str(OUT / ('desktop-' + view + '.png')))
         report['checks']['three_camera_views'] = True
         page.locator('#environment').click()
-        page.wait_for_timeout(200)
-        assert page.evaluate('window.__frame.mode') == 'studio'
+        page.wait_for_function('window.__frame.mode === "studio"', timeout=30000)
         page.screenshot(path=str(OUT / 'desktop-studio.png'))
         report['checks']['studio_lighting'] = True
         page.locator('#reset').click()
         page.locator('#play').click()
-        page.wait_for_timeout(200)
-        assert page.evaluate('window.__frame.paused') is False
+        page.wait_for_function('window.__frame.paused === false', timeout=30000)
         page.locator('#quality').click()
         assert page.locator('#quality').inner_text() == 'Detail: light'
         page.locator('#focus').click()
@@ -96,7 +91,8 @@ try:
         report['checks']['resume_quality_focus'] = True
         page.set_viewport_size({'width': 390, 'height': 844})
         page.locator('#reset').click()
-        page.wait_for_timeout(1200)
+        page.wait_for_function('window.__frame.view === "full"', timeout=30000)
+        page.wait_for_timeout(1300)
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         assert page.evaluate('window.__frame.glError') == 0
         page.screenshot(path=str(OUT / 'mobile.png'))
