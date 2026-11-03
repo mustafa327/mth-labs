@@ -1,22 +1,43 @@
-"""Verify the public raft model, motion, controls, and embedded OceanBond page."""
+"""Verify the public raft model, motion, controls, and current gameplay chapters."""
 import hashlib
 import json
 import pathlib
 import time
 import urllib.request
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 
 BASE = 'https://mustafa327.github.io/mth-labs/'
+CHAPTERS = ('farming', 'combat', 'crafting', 'settlement', 'sailing')
+RETIRED_PAGES = ('oceanbond-world.html', 'oceanbond-trailer.html')
 OUT = pathlib.Path('raft-verification')
 OUT.mkdir(exist_ok=True)
 report = {'base_url': BASE, 'checks': {}, 'errors': [], 'failed_http_responses': []}
 
 
-def get(path):
+def get(path, timeout=40):
     req = urllib.request.Request(BASE + path, headers={'Cache-Control': 'no-cache'})
-    with urllib.request.urlopen(req, timeout=40) as response:
+    with urllib.request.urlopen(req, timeout=timeout) as response:
         assert response.status == 200, (path, response.status)
         return response.read()
+
+
+def wait_for_chapters(timeout=120):
+    """Pages publishes asynchronously; wait for the required page, not a fixed delay."""
+    deadline = time.monotonic() + timeout
+    last_error = 'No response received'
+    while time.monotonic() < deadline:
+        try:
+            remaining = max(1, min(20, deadline - time.monotonic()))
+            html = get('oceanbond.html?check=' + str(time.time_ns()), timeout=remaining).decode()
+            missing = [name for name in CHAPTERS if f'id="{name}"' not in html]
+            if not missing:
+                report['checks']['published_chapters_ready'] = list(CHAPTERS)
+                return
+            last_error = 'Missing published chapter sections: ' + ', '.join(missing)
+        except (OSError, AssertionError) as exc:
+            last_error = str(exc)
+        time.sleep(max(0, min(5, deadline - time.monotonic())))
+    raise AssertionError(f'OceanBond chapter page not ready within {timeout}s: {last_error}')
 
 
 def state_at(page, timestamp):
@@ -31,15 +52,17 @@ def state_at(page, timestamp):
 
 
 try:
-    html = get('oceanbond.html?check=' + str(int(time.time()))).decode()
-    assert 'id="sailing"' in html, 'Raft section missing from OceanBond page'
+    wait_for_chapters()
     asset = get('oceanbond-raft/assets/red-sail-raft.glb')
     checksum = hashlib.sha256(asset).hexdigest()
     report['checks']['model_bytes'] = len(asset)
     report['checks']['model_sha256'] = checksum
     assert checksum == 'c8ebcc90f8095aa6069cd3b6c986bf63d0c90bf6643d7b74d493cd9ce1660373', 'Hosted GLB differs from approved model'
     report['checks']['approved_asset_exact_match'] = True
-    assert 'oceanbond-raft/' in get('sitemap.xml').decode(), 'Raft URL missing from sitemap'
+    sitemap = get('sitemap.xml?check=' + str(time.time_ns())).decode()
+    assert 'oceanbond-raft/' in sitemap, 'Raft URL missing from sitemap'
+    for retired in RETIRED_PAGES:
+        assert retired not in sitemap, f'Retired page remains in sitemap: {retired}'
     report['checks']['sitemap'] = True
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, args=['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'])
@@ -103,7 +126,17 @@ try:
         assert page.evaluate('window.__frame.glError') == 0
         page.screenshot(path=str(OUT / 'mobile.png'))
         report['checks']['mobile_layout'] = True
-        page.goto(BASE + 'oceanbond.html?verify=embed', wait_until='domcontentloaded', timeout=60000)
+        page.goto(BASE + 'oceanbond.html?verify=embed-' + str(time.time_ns()), wait_until='domcontentloaded', timeout=60000)
+        # The five current chapters replace the deliberately retired island and trailer pages.
+        expect(page.locator('section.chapter')).to_have_count(len(CHAPTERS))
+        for chapter in CHAPTERS:
+            expect(page.locator(f'section.chapter#{chapter}')).to_have_count(1)
+            expect(page.locator(f'.chapter-nav a[href="#{chapter}"]')).to_have_count(1)
+            expect(page.locator(f'#{chapter} .model-box[data-scene="{chapter}"]')).to_have_count(1)
+        for retired in RETIRED_PAGES:
+            expect(page.locator(f'a[href*="{retired}"]')).to_have_count(0)
+        report['checks']['five_chapters_replace_old_island'] = True
+        report['checks']['retired_page_links_absent'] = True
         page.locator('#sailing').scroll_into_view_if_needed()
         page.wait_for_selector('#sailing iframe')
         frame_element = page.locator('#sailing iframe')
@@ -111,10 +144,8 @@ try:
         frame = frame_element.element_handle().content_frame()
         frame.wait_for_function('window.__ready===true && window.__frame && window.__frame.frames>2', timeout=60000)
         assert frame.evaluate('window.__frame.glError') == 0
-        assert page.locator('a[href="oceanbond-world.html"]').count()>0
         page.screenshot(path=str(OUT / 'mobile-embedded.png'))
         report['checks']['embedded_viewer'] = True
-        report['checks']['five_chapters_replace_old_island'] = True
         context.close()
         reduced = browser.new_context(viewport={'width': 1280, 'height': 800}, reduced_motion='reduce')
         rp = reduced.new_page()
