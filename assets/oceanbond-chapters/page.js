@@ -25,5 +25,6 @@ window.addEventListener('scroll',request,{passive:true});window.addEventListener
 window.addEventListener('message',event=>{if(event.origin!==location.origin||event.data?.type!=='ob-model-ready')return;for(const [panel,frame] of frames){if(frame.contentWindow===event.source){panel.classList.add('is-ready');announce(panel,'LIVE 3D · DRAG TO ROTATE');send(frame,panel===active)}}});
 document.addEventListener('visibilitychange',()=>{for(const [panel,frame] of frames)send(frame,!document.hidden&&panel===active);if(!document.hidden)request()});
 if(location.hash==='#red-sail-model')location.replace('#sailing');
+window.addEventListener('message',event=>{if(event.origin!==location.origin||event.data?.type!=='ob-model-error')return;for(const [panel,frame]of frames){if(frame.contentWindow===event.source){frame.hidden=true;panel.classList.remove('is-ready');announce(panel,'STILL PREVIEW · 3D UNAVAILABLE');panel.querySelector('.placeholder').textContent='Your browser could not start 3D. The model preview and chapter remain available.'}}});
 const year=document.querySelector('#year');if(year)year.textContent=new Date().getFullYear();request();
 })();

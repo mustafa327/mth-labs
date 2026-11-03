@@ -32,7 +32,7 @@ def state_at(page, timestamp):
 
 try:
     html = get('oceanbond.html?check=' + str(int(time.time()))).decode()
-    assert 'id="red-sail-model"' in html, 'Raft section missing from OceanBond page'
+    assert 'id="sailing"' in html, 'Raft section missing from OceanBond page'
     asset = get('oceanbond-raft/assets/red-sail-raft.glb')
     checksum = hashlib.sha256(asset).hexdigest()
     report['checks']['model_bytes'] = len(asset)

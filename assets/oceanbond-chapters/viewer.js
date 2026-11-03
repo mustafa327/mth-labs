@@ -7,9 +7,9 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const query = new URLSearchParams(location.search);
 const catalogue = {
  farming:{label:'Farming · The growing plot',file:'models/farming.glb',target:[0,1.0,0],az:.55,el:.58,dist:8.3,sea:false},
- combat:{label:'Combat · The training ground',file:'models/combat.glb',target:[0,1.55,0],az:2.65,el:.24,dist:8.1,sea:false},
+ combat:{label:'Combat · The training ground',file:'models/combat.glb',target:[0,1.55,0],az:.55,el:.42,dist:8.7,sea:false},
  crafting:{label:'Crafting · The workbench',file:'models/crafting.glb',target:[0,1.4,0],az:.52,el:.42,dist:8.2,sea:false},
- settlement:{label:'Settlement · The first home',file:'models/settlement.glb',target:[0,1.65,0],az:.62,el:.31,dist:9.5,sea:false},
+ settlement:{label:'Settlement · The first home',file:'models/settlement.glb',target:[0,1.65,0],az:.62,el:.43,dist:9.5,sea:false},
  sailing:{label:'Sailing · The red sail',file:'../../oceanbond-raft/assets/red-sail-raft.glb',target:[-.4,2.8,0],az:.60,el:.16,dist:15.4,sea:true}
 };
 const kind = Object.hasOwn(catalogue,query.get('scene')) ? query.get('scene') : 'farming';
@@ -23,7 +23,7 @@ canvas.setAttribute('aria-label',config.label+'. Animated three-dimensional mode
 if(!config.sea)$('#environment').hidden=true;
 
 let gl;try{gl=canvas.getContext('webgl2',{alpha:false,antialias:true,powerPreference:'low-power'})}catch{}
-function fail(s){$('#loading').hidden=true;$('#error').hidden=false;$('#error-text').textContent=s}
+function fail(s){if(parent!==window&&location.origin!=='null')parent.postMessage({type:'ob-model-error',scene:kind},location.origin);$('#loading').hidden=true;$('#error').hidden=false;$('#error-text').textContent=s}
 if(!gl){fail('This interactive model needs WebGL 2. The downloadable model remains available.');return}
 const PI=Math.PI,TAU=PI*2,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const add=(a,b)=>a.map((v,i)=>v+b[i]),sub=(a,b)=>a.map((v,i)=>v-b[i]),dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],norm=a=>{let d=Math.hypot(...a)||1;return a.map(v=>v/d)};
