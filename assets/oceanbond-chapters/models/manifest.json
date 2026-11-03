@@ -1,0 +1,38 @@
+{
+  "license": "Original OceanBond web concept models",
+  "note": "Animated object studies, not Unity gameplay.",
+  "models": [
+    {
+      "file": "farming.glb",
+      "bytes": 2313292,
+      "triangles": 36592,
+      "meshes": 22,
+      "textureImages": 18,
+      "animationChannels": 13
+    },
+    {
+      "file": "combat.glb",
+      "bytes": 1848340,
+      "triangles": 23160,
+      "meshes": 23,
+      "textureImages": 18,
+      "animationChannels": 3
+    },
+    {
+      "file": "crafting.glb",
+      "bytes": 1629728,
+      "triangles": 15676,
+      "meshes": 10,
+      "textureImages": 18,
+      "animationChannels": 2
+    },
+    {
+      "file": "settlement.glb",
+      "bytes": 3262912,
+      "triangles": 64824,
+      "meshes": 20,
+      "textureImages": 18,
+      "animationChannels": 13
+    }
+  ]
+}

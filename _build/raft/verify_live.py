@@ -104,7 +104,9 @@ try:
         page.screenshot(path=str(OUT / 'mobile.png'))
         report['checks']['mobile_layout'] = True
         page.goto(BASE + 'oceanbond.html?verify=embed', wait_until='domcontentloaded', timeout=60000)
-        frame_element = page.locator('iframe.ob-raft-frame')
+        page.locator('#sailing').scroll_into_view_if_needed()
+        page.wait_for_selector('#sailing iframe')
+        frame_element = page.locator('#sailing iframe')
         frame_element.scroll_into_view_if_needed()
         frame = frame_element.element_handle().content_frame()
         frame.wait_for_function('window.__ready===true && window.__frame && window.__frame.frames>2', timeout=60000)
@@ -112,7 +114,7 @@ try:
         assert page.locator('a[href="oceanbond-world.html"]').count()>0
         page.screenshot(path=str(OUT / 'mobile-embedded.png'))
         report['checks']['embedded_viewer'] = True
-        report['checks']['original_island_link_preserved'] = True
+        report['checks']['five_chapters_replace_old_island'] = True
         context.close()
         reduced = browser.new_context(viewport={'width': 1280, 'height': 800}, reduced_motion='reduce')
         rp = reduced.new_page()

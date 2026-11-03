@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,follow"><meta name="theme-color" content="#12272c"><title>OceanBond · Interactive model</title><link rel="icon" href="../mark.svg"><link rel="stylesheet" href="viewer.css"><script src="viewer.js" defer></script></head>
+<body><main class="experience"><canvas id="scene" tabindex="0" aria-label="Animated OceanBond model"></canvas>
+<div class="loading" id="loading" role="status"><span></span><p>LOADING THE MODEL</p><small>Textured geometry · Continuous motion</small></div>
+<div class="error" id="error" hidden role="alert"><h1>The 3D view could not start.</h1><p id="error-text"></p><a id="model-file-fallback" href="models/farming.glb">Download this model instead</a></div>
+<header><span id="model-name">OceanBond model study</span><a id="back" href="../../oceanbond.html" target="_top" aria-label="Return to OceanBond">↗</a></header>
+<div class="interact-hint">Drag to orbit · Click, then scroll to zoom</div>
+<div class="toolbar" id="controls" role="group" aria-label="3D model controls"><button id="play" type="button" aria-pressed="true">Pause motion</button><button id="reset" type="button">Reset view</button><button id="fullscreen" type="button" aria-label="Fullscreen model">⛶</button><button id="quality" type="button">Detail: full</button><a id="download" href="models/farming.glb" download aria-label="Download animated GLB model">GLB ↓</a>
+<button id="environment" type="button" aria-pressed="false">Studio lighting</button>
+<div hidden><button id="focus">Focus model</button><label for="speed">Speed<input id="speed" type="range" min=".3" max="1.6" step=".1" value="1"><span id="speed-value">1.0×</span></label></div></div>
+<footer><span id="status" role="status" aria-live="polite">LOADING</span><span>INTERACTIVE MODEL STUDY</span></footer>
+</main></body></html>
