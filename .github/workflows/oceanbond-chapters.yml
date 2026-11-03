@@ -33,6 +33,7 @@ jobs:
           python _build/chapters/build_models.py
           python _build/chapters/prepare_viewer.py
           python _build/chapters/prepare_page.py
+          python _build/chapters/finalize.py
           node --check assets/oceanbond-chapters/viewer.js
           node --check assets/oceanbond-chapters/page.js
       - name: Verify models, motion, chapter embeds and mobile layout
